@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+.Recado {
+	text-align: justify;
+}
+-->
+</style>
+</head>
+<body>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td align="left"><img src="file:///@SERVIDOR/imobiliaria/IMG/DIVERSO/logoPadrao.bmp" border="0" /></td>
+    <td align="center"><h3><b>EMPRÉSTIMO DE CHAVES</b></h3></td>
+    <td align="center">
+    <script type="text/javascript">
+		var currentTime = new Date();
+		var day = currentTime.getDate();
+		var month = currentTime.getMonth();
+		var year = currentTime.getFullYear();
+		document.write(day +"/"+ month + "/"+ year);
+		document.write("<br />");
+
+		var curentTime = new Date();
+		var hours = currentTime.getHours();
+		var minutes = currentTime.getMinutes();
+
+		if(minutes < 10){
+			minutes = "0"+minutes;
+		}
+
+		document.write(hours+":"+minutes+" ")
+
+		if (hours > 11){
+			document.write("PM");
+		} else {
+			document.write("AM");
+		}
+
+	</script>
+    &nbsp;</td>
+  </tr>
+</table>
+<br />
+<span class="Recado">Como pretendente à locacão de um imóvel, <b>DECLARO</b> receber desta imobiliária (NOME DA IMOBILIARIA) a(s) chave(s) do(s) imóvel(eis) acima mensionados, com o propósito único de conhecê-lo(s), compromentendo-me a devolve-la(s), impreterivelmente, no prazo estipulado, ciente de que, em caso do não cumprimento do horário estipulado ou na falta de alguma chave, arcarei com as despesas monetárias.
+<b>DECLARO</b> ainda estar ciente de que a não devolucão da(s) chave(s) e/ou depredacão do(s) imóvel(eis), implicará em responsabilidade civil e criminal.</span><br />
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td>DADOS DA PESSOA:&nbsp;@PESSOA_NOME</td>
+    <td><p>&nbsp;</p></td>
+  </tr>
+  <tr>
+    <td>IMÓVEIS À VISITAR:&nbsp;@IMOVEL</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<p align="center">_________________________________<br /><b>@PESSOA_NOME</b></p>
+</body>
+</html>

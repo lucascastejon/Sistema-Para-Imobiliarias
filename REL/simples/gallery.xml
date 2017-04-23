@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simpleviewergallery maxImageWidth="600" maxImageHeight="500" textColor="0xFFFFFF" frameColor="0xFFFFFF" frameWidth="20" stagePadding="40" navPadding="40" thumbnailColumns="3" thumbnailRows="3" navPosition="left" vAlign="center" hAlign="center" title="HABITAT IMÓVEIS" enableRightClickOpen="true" backgroundImagePath="" imagePath="" thumbPath="">
+<image> <filename>file://///127.0.0.1/imobiliaria/IMG/IMOVEL/I_10009469_60_1.JPG</filename> <caption>FACHADA</caption> </image>
+<image> <filename>file://///127.0.0.1/imobiliaria/IMG/IMOVEL/I_10009469_60_2.JPG</filename> <caption>FACHADA</caption> </image>
+<image> <filename>file://///127.0.0.1/imobiliaria/IMG/IMOVEL/I_10009469_60_3.JPG</filename> <caption>FACHADA</caption> </image>
+</simpleviewergallery>
