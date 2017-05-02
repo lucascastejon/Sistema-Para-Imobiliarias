@@ -155,14 +155,11 @@ type
     Label31: TLabel;
     Label32: TLabel;
     TabOperacao: TTabSheet;
-    Edit1: TEdit;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
     BitBtn21: TBitBtn;
-    RadioButton3: TRadioButton;
-    RadioButton4: TRadioButton;
-    RadioButton5: TRadioButton;
-    RadioButton6: TRadioButton;
+    RadioColocaBoleto: TRadioButton;
+    RadioRetiraBoleto: TRadioButton;
+    RadioColocaDeposito: TRadioButton;
+    RadioRetiraDeposito: TRadioButton;
     procedure BitBtn21Click(Sender: TObject);
     procedure BitBtn20Click(Sender: TObject);
     procedure BitBtn19Click(Sender: TObject);

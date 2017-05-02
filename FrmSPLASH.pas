@@ -44,10 +44,6 @@ end;
 
 procedure TSplash.FormShow(Sender: TObject);
 Var varSQL: TZQuery;
-
-{  BEGIN - NÃO SEI O PQ ESTÁ ABRINDO UM BREAKPOINT NESTA PASTE! BUG NO ARQUIVO! }
-
-{BEGIN}
 Begin
      Application.Title := 'Processando...';
      self.Show;
@@ -226,6 +222,7 @@ Begin
                 End;
           end;
 
+     varSQL.Close;
     FreeAndNil(varSQL);
     Application.Title := Titulo;
 

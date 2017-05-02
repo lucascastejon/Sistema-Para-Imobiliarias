@@ -745,6 +745,7 @@ try
      //FECHA COMPONENTES
      varCaixa.Close;
      varPessoa.Close;
+     varSQL.Close;
      FreeAndNil(varCaixa);
      FreeAndNil(varPessoa);
      FreeAndNil(varSQL);
@@ -877,9 +878,6 @@ end;
 procedure TPRINCIPAL.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
      try
-        //FreeAndNil(ThreadExporta);
-        //FreeAndNil(threadftp);
-        //FreeAndNil(tread);
 
         usuarioLogadoRetira(); //CONTROLE DE USUARIO.
 
@@ -968,6 +966,7 @@ begin
 
      
      principal.Caption := getConf('EMPRESA_FANTASIA')+ ' - '+LowerCase(Conexao.Database)+' v(' + getVersaoArq()  + ') -  '+celulaNome+' '+celulaTelefone;
+     varSQL.Close;
      FreeAndNil(varSQL);
 
 end;
@@ -1192,7 +1191,7 @@ begin
             etiqueta.Close;
             if varSQL <> nil then
             Begin
-                 //varSQL.Close;
+                 varSQL.Close;
                  FreeAndNil(varSQL);
             end;
      end;
@@ -1233,6 +1232,8 @@ begin
               varSQL := unUtilitario.getSQL('update imovel set ANUNCIAR = ''NAO'' ');
               varSQL := unUtilitario.getSQL('update imovel set ANUNCIAR = ''SIM'' where ativo = ''SIM'' and internet = ''SIM'' ');
 
+              varSQL.Close;
+              varMySQL.Close;
               FreeAndNil(varSQL);
               FreeAndNil(varMySQL);
 

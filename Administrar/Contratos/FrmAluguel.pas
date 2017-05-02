@@ -564,6 +564,8 @@ type
     Label138: TLabel;
     checkGarantidoIPTU: TCheckBox;
     checkgarantidoOutros: TCheckBox;
+    ListView8: TListView;
+    Label139: TLabel;
     procedure BitBtn15Click(Sender: TObject);
     procedure btnIRRFClick(Sender: TObject);
     procedure EditPrimeiroAluguelDinheiroExit(Sender: TObject);
@@ -1113,7 +1115,7 @@ begin
         DM_ADMIN.Z_ALUGUELMORADORES.Value := 0;
         DM_ADMIN.Z_ALUGUELFINALIDADE.Value := 'MORADIA';
         DM_ADMIN.Z_ALUGUELISENTO_CPMF.Value := 'SIM';
-        DM_ADMIN.Z_ALUGUELHONORARIO_1ALUGUEL.Value := '0';
+        DM_ADMIN.Z_ALUGUELHONORARIO_1ALUGUEL.Value := 'NAO';
         DM_ADMIN.Z_ALUGUELHONORARIO_ADMIN.Value := 'NAO';
         DM_ADMIN.Z_ALUGUELPARCELADO_EM.Value := 0;
         DM_ADMIN.Z_ALUGUELCOMISSAO_LOCACAO.Value := 0;
@@ -3127,6 +3129,30 @@ procedure TCAD_Aluguel.Grid_BuscaDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
   VAR D: TDate; ccc: integer; varsql: TZQuery;
   begin
+
+  IF (COLUMN.Title.CAPTION = 'Código') AND (DS.DataSet.RecordCount > 0) THEN
+  begin
+
+       if (DS.DataSet.FieldByName('HONORARIO_ADMIN').AsString = 'SIM') THEN
+            Grid_Busca.Canvas.Brush.Color:= clGradientActiveCaption
+       else
+           Grid_Busca.Canvas.Brush.Color:= clWhite;
+
+
+       if (DS.DataSet.FieldByName('HONORARIO_1ALUGUEL').AsString = 'SIM') THEN
+       begin
+            Grid_Busca.Canvas.Font.Color:= clOlive;
+            Grid_Busca.Canvas.Font.Style := Grid_Busca.Canvas.Font.Style + [fsBold, fsUnderline];
+       end
+       else
+       Begin
+            Grid_Busca.Canvas.Font.Color:= clBlack;
+            Grid_Busca.Canvas.Font.Style := Grid_Busca.Canvas.Font.Style;
+       end;
+
+       Grid_Busca.Canvas.FillRect(Rect);
+       Grid_Busca.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  end;
 
   IF (COLUMN.Title.CAPTION = 'Ativo') AND (DS.DataSet.RecordCount > 0) THEN
   begin

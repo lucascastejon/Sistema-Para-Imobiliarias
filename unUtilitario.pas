@@ -60,7 +60,6 @@ function retiraFormatacaoDinheiro(DinheiroFormatado: string): Double;
 function desmarcarBoletos(texto: String): string;
 function informacaoBoletos(texto: String): String;
 procedure espera(segundos: Smallint; texto: string);
-function verificaPermissaoMatriz(formulario: TForm): Boolean;
 function dimobFormataCidade(cidade: String): String;
 procedure salvaGrid(formulario: String; grid: TDBGrid);
 function pegaGrid(formulario: String; grid: TDBGrid): TDBGrid;
@@ -68,7 +67,6 @@ function getCodigosConta(contas: String): TStringList;
 function getCodigosContaSomente(posicao: integer; texto: String): String;
 function getValorTotal(Coluna: String; componente: TZQuery): String;
 function copiaArquivo(origem, nomeDestino, pasta: String): String;
-function getExtensao(arquivo: String): String;
 function verificaPermissao(permissao: String): Boolean;
 function PasswordInputBox(const ACaption, APrompt:string): string;
 function verificaPermissaoAdministrador(permissao: String): Boolean;
@@ -76,37 +74,138 @@ function verificaAdministrador(): Boolean;
 function verificaMesmaPessoa(): Boolean;
 function colocarMascara(edt: String;str:String):string;
 function formataTextoSQL(texto: String): String;
-function codificar(texto: String): String;
-function decodificar(texto: String): String;
-function Base64Encode(const S: string): string;
-function Base64Decode(const S: string): string;
 procedure SetHorizontalScrollBar(lb : TListBox);
 function Dias_Uteis(DataI, DataF:TDateTime):Integer;
 function validaPontoDinheiroChange(componente: TEdit): TEdit;
 function verificaAspasSimples(componenteDB: TZQuery): boolean;
-function StringBetween(const Str, Str1, Str2: String): String;
 procedure usuarioLogadoRetira();
 procedure usuarioLogadoColoca();
 function usuarioLogadoVerifica(): Boolean;
-
-const
-  B64Table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
 
 implementation
 
 uses unINI, IdMessage, IdMessageParts, IdAttachment, DB, unLog, thrAtualizacao;
 
-function StringBetween(const Str, Str1, Str2: String): String;
-var
-Inicio, Fim : String;
-begin
-     Inicio := Copy(Str, Pos(Str1, Str) + Length(Str1));
-     // Pega o Texto Restante, iniciando ao final da variavel Str1;
-     Fim := Copy(Inicio, 0, Pos(str2,Inicio) - 1);
-     // Copia o Texto da posição inicial '0' até o Final, que é determinado pela posição inicial da variavel str2 menos '1' para corrigir;
-     Result := trim(Fim);
+function getSelect(sql: String): TZQuery;
+Begin
+
+     if NOT PRINCIPAL.Conexao.Connected then
+     Begin
+          principal.setmensagem('Você não está conectado(a) ao servidor. Favor verificar a sua rede (máquina, cabo e equipamentos) O sistema vai TENTAR RECONECTAR AUTOMATICAMENTE agora.');
+
+          try
+             PRINCIPAL.Conexao.Connected := True;
+          except
+                Begin
+                     unUtilitario.setmensagem('Verifique os problemas da rede para conseguir usar o sistema. (O sistema será fechado.)','erro');
+                     PRINCIPAL.Close;
+                end;
+          end;
+     end;
+     
+
+      try
+         result := TZQuery.Create(PRINCIPAL);
+         result.Connection := PRINCIPAL.Conexao;
+         result.SQL.Add(' '+sql);
+         result.Open;
+         //result.RecordCount;
+
+         if POS('UPDATE', UpperCase(result.SQL.Text)) > 0 then
+            setLogSQL('SQL UPDATE', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
+
+         if POS('INSERT', UpperCase(result.SQL.Text)) > 0 then
+            setLogSQL('SQL INSERT', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
+
+         if POS('DELETE', UpperCase(result.SQL.Text)) > 0 then
+            setLogSQL('SQL DELETE', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
+
+      except
+            On E : Exception Do
+            Begin
+                 if (StrPos(pchar(E.Message), 'Failed to establish a connection.') <> nil) then
+                 Begin
+                      ShowMessage('Problemas na rede! O sistema não conseguiu se conectar ao Servidor! Verifique o campo SERVIDOR no Login.'+#13+#13+SQL+#13+'ERRO: '+#13+e.Message);
+                      PRINCIPAL.Close;
+                 end
+                 else
+                 Begin
+                      ShowMessage('Problemas na rede! Erro ao passar um comando SQL ao Servidor!'+#13+#13+SQL+#13+'ERRO: '+#13+e.Message);
+                 end;
+                 FreeAndNil(result);
+                 exit;
+            End;
+      end;
 end;
+
+procedure setBackup();
+VAR arquivoRAR, arquivoBkp: String;
+    varSQL: TZQuery;
+Begin
+
+TRY
+     varSQL := getSelect('SELECT VALOR FROM SISTEMA WHERE TIPO = ''BKP_DATA'' ');
+
+     if (FormatDateTime('dd/mm/yyyy',varSQL.Fields[0].AsDateTime) <> FormatDateTime('dd/mm/yyyy',Date)) AND (getConf('BKP_ATIVO') = 'SIM') AND ((UpperCase(getUser('SERVIDOR')) = UpperCase(getUser('MAQUINA'))) OR (getUser('SERVIDOR') = getUser('IP'))) then
+     Begin
+          PRINCIPAL.setMensagem('REALIZANDO BACKUP DO SISTEMA...');
+
+          arquivoRAR := getConf('BKP_DESTINO1')+getConf('CLIENTE')+'_'+ formataDataSQL(DateToStr(Date))+'.rar';
+          arquivoBkp := getConf('BKP_DESTINO1')+getConf('CLIENTE')+'_'+ formataDataSQL(DateToStr(Date))+'.BKP';
+
+          if (getConf('BKP_DESTINO1') = 'NULO') OR (Trim(getConf('BKP_DESTINO1')) = '') Then
+          Begin
+               PRINCIPAL.setMensagem('O DESTINO1 do backup NÃO está configurado no sistema.');
+               EXIT;
+          end;
+
+          if (getConf('BKP_DESTINO2') = 'NULO') OR (Trim(getConf('BKP_DESTINO2')) = '') Then
+          Begin
+               PRINCIPAL.setMensagem('O DESTINO2 do backup NÃO está configurado no sistema.');
+               EXIT;
+          end;
+
+          if (getConf('BKP_ORIGEM') = 'NULO') OR (Trim(getConf('BKP_ORIGEM')) = '') Then
+          Begin
+               PRINCIPAL.setMensagem('A ORIGEM do backup NÃO está configurado no sistema.');
+               EXIT;
+          end;
+
+          //Comprime o banco e realiza o Garbage Collection
+          WinExec(pchar(ExtractFilePath(ParamStr(0))+'gbak -backup -t -v -user '+firebirdUsuario+' -password '+firebirdSenha+' "'+getConf('BKP_ORIGEM')+'" "'+arquivoBkp+'"'), SW_SHOW);
+
+          espera(100,'Comprimindo e Criptografando o banco...');
+
+          WinExec(pchar(ExtractFilePath(ParamStr(0))+'gbak -backup -t -v -user '+firebirdUsuario+' -password '+firebirdSenha+' "'+getConf('BKP_ORIGEM')+'" "'+getConf('BKP_DESTINO2')+getConf('CLIENTE')+'_ '+ formataDataSQL(DateToStr(Date))+'.BKP"'), SW_SHOW);
+
+          //Zipa e envia para a internet.
+          //if (DayOfTheMonth(Date) = 1) OR (DayOfTheMonth(Date) = 6) OR (DayOfTheMonth(Date) = 13) OR (DayOfTheMonth(Date) = 20) OR (DayOfTheMonth(Date) = 27) then
+          if ((DayOfTheMonth(Date) mod 2) = 0) then
+          Begin
+               WinExec(PChar(ExtractFilePath(ParamStr(0))+'Rar.exe a "'+arquivoRAR+'" "'+arquivoBkp+'"'), SW_SHOW);
+
+               espera(100,'Compactando backup e enviando para a Nuvem...');
+               PRINCIPAL.setMensagem('Conectando-se ao FTP...');
+               conectaFTP(ftpImoveisServidor,ftpImoveisUsuario,ftpImoveisSenha);
+               //PRINCIPAL.ObjFTP.ChangeDir(getConf('BKP_CAMINHO_FTP'));
+               PRINCIPAL.ObjFTP.ChangeDir('/backup_banco_imobiliarias/');
+               PRINCIPAL.setMensagem('Enviando backup para o FTP...');
+               PRINCIPAL.ObjFTP.Put(arquivoRAR);
+          end;
+
+          varSQL := getSQL('UPDATE sistema set valor = '''+FormatDateTime('dd/mm/yyyy',Date)+''' where tipo = ''BKP_DATA''');
+          varSQL.ApplyUpdates;
+
+     end;
+
+finally
+       PRINCIPAL.setMensagem('AÇÃO FINALIZADA.');
+       PRINCIPAL.ObjFTP.Disconnect;
+       varSQL.Close;
+       FreeAndNil(varSQL);
+end;
+
+End;
 
 function validaPontoDinheiroChange(componente: TEdit): TEdit;
 Begin
@@ -147,37 +246,6 @@ begin
 
   SendMessage(lb.Handle, LB_SETHORIZONTALEXTENT, MaxWidth + 5, 0) ;
 
-end;
-
-function Base64Encode(const S: string): string;
-var
-  InBuf: array[0..2] of Byte;
-  OutBuf: array[0..3] of Char;
-  iI, iJ: Integer; //É USADO SIM (DEBUG)
-begin
-  SetLength(Result, ((Length(S) + 2) div 3) * 4);
-  for iI := 1 to ((Length(S) + 2) div 3) do begin
-    if Length(S) < (iI * 3) then
-      Move(S[(iI - 1) * 3 + 1], InBuf, Length(S) - (iI - 1) * 3)
-    else
-      Move(S[(iI - 1) * 3 + 1], InBuf, 3);
-    OutBuf[0] := B64Table[((InBuf[0] and $FC) shr 2) + 1];
-    OutBuf[1] := B64Table[(((InBuf[0] and $3) shl 4) or ((InBuf[1] and $F0) shr 4)) + 1];
-    OutBuf[2] := B64Table[(((InBuf[1] and $F) shl 2) or ((InBuf[2] and $C0) shr 6)) + 1];
-    OutBuf[3] := B64Table[(InBuf[2] and $3F) + 1];
-    Move(OutBuf, Result[(iI - 1) * 4 + 1], 4);
-  end;
-  if Length(S) mod 3 = 1 then begin
-    Result[Length(Result) - 1] := '=';
-    Result[Length(Result)] := '=';
-  end else if Length(S) mod 3 = 2 then
-    Result[Length(Result)] := '=';
-end;
-
-function codificar(texto: String): String;
-begin
-     //O 'CDSV2Vs' é para dificultar a leitura por terceiros, poderia ser qualquer coisa. Essa está conforme os outros sistemas como o de boleto online
-     result := 'CDSV2Vs'+Base64Encode(texto);
 end;
 
 function PasswordInputBox(const ACaption, APrompt:string): string;
@@ -337,31 +405,9 @@ Begin
      if PRINCIPAL.conexao.connected then
      Begin
           varSQL := getSQL('delete from tabela where NOME = '''+Trim(getUser('CODIGO_USUARIO'))+''' and NOMETEC = ''LOGIN'' and OBS = ''LOGIN >> BLOQUEADO'' ');
+          varSQL.Close;
           FreeAndNil(varSQL);
      end;
-End;
-
-function getExtensao(arquivo: String): String;
-Var i: Integer;
-    extensao: String;
-Begin
-
-     arquivo := Trim(arquivo);
-
-     for i := length(arquivo) downto 0  do
-         if arquivo[i] <> '.' then
-            Result := Result + arquivo[i]
-         else
-             Break;
-
-     for i := length(Result) downto 0  do
-         extensao := extensao + Result[i];
-
-
-     if Length(trim(Result)) = 0 then
-        Result := '.ERRO'
-     Else
-        Result := '.'+UpperCase(extensao);
 End;
 
 function copiaArquivo(origem, nomeDestino, pasta: String): String;
@@ -370,7 +416,7 @@ Begin
      retorno := 'SEM ARQUIVO!';
      Try
      TRY
-        retorno := nomeDestino+extractfileext(origem);//nomeDestino+getExtensao(origem);
+        retorno := nomeDestino+extractfileext(origem); 
         nomeDestino := '\\'+getUser('SERVIDOR')+'\IMOBILIARIA\'+pasta+'\'+retorno;
 
         if NOT copyfile(PChar(origem),PChar(nomeDestino),False) Then
@@ -614,90 +660,6 @@ begin
     end;
   end;
 end;
-
-function verificaPermissaoMatriz(formulario: TForm): Boolean;
-var varSQL: TZQuery;
-Begin
-     Result := True;
-
-     varSQL := getSelect('SELECT ID_USUARIO FROM AUTORIZACAO WHERE (ID_USUARIO =  '+getUser('CODIGO_USUARIO')+') AND (upper(JANELA) = upper('''+Trim(formulario.Name)+''')) ');
-
-     if varSQL.RecordCount > 0 then
-     Begin
-          setMensagem(formulario.Name+' não está acessível. Talvez você não tenha permissão para usar esse recurso de sistema. '+#13+'Entre em contato com o seu gerente.','erro');
-          Result := False;
-     end;
-
-     FreeAndNil(varSQL);
-End;
-
-procedure setBackup();
-VAR arquivoRAR, arquivoBkp:string;
-    varSQL: TZQuery;
-Begin
-TRY
-     varSQL := getSelect('SELECT VALOR FROM SISTEMA WHERE TIPO = ''BKP_DATA'' ');
-
-     if (FormatDateTime('dd/mm/yyyy',varSQL.Fields[0].AsDateTime) <> FormatDateTime('dd/mm/yyyy',Date)) AND (getConf('BKP_ATIVO') = 'SIM') AND ((UpperCase(getUser('SERVIDOR')) = UpperCase(getUser('MAQUINA'))) OR (getUser('SERVIDOR') = getUser('IP'))) then
-     Begin
-          PRINCIPAL.setMensagem('REALIZANDO BACKUP DO SISTEMA...');
-
-          arquivoRAR := getConf('BKP_DESTINO1')+getConf('CLIENTE')+'_'+ formataDataSQL(DateToStr(Date))+'.rar';
-          arquivoBkp := getConf('BKP_DESTINO1')+getConf('CLIENTE')+'_'+ formataDataSQL(DateToStr(Date))+'.BKP';
-
-          if (getConf('BKP_DESTINO1') = 'NULO') OR (Trim(getConf('BKP_DESTINO1')) = '') Then
-          Begin
-               PRINCIPAL.setMensagem('O DESTINO1 do backup NÃO está configurado no sistema.');
-               EXIT;
-          end;
-
-          if (getConf('BKP_DESTINO2') = 'NULO') OR (Trim(getConf('BKP_DESTINO2')) = '') Then
-          Begin
-               PRINCIPAL.setMensagem('O DESTINO2 do backup NÃO está configurado no sistema.');
-               EXIT;
-          end;
-
-          if (getConf('BKP_ORIGEM') = 'NULO') OR (Trim(getConf('BKP_ORIGEM')) = '') Then
-          Begin
-               PRINCIPAL.setMensagem('A ORIGEM do backup NÃO está configurado no sistema.');
-               EXIT;
-          end;
-
-          //Comprime o banco e realiza o Garbage Collection
-          WinExec(pchar(ExtractFilePath(ParamStr(0))+'gbak -backup -t -v -user '+firebirdUsuario+' -password '+firebirdSenha+' "'+getConf('BKP_ORIGEM')+'" "'+arquivoBkp+'"'), SW_SHOW);
-
-          espera(100,'Comprimindo e Criptografando o banco...');
-
-          WinExec(pchar(ExtractFilePath(ParamStr(0))+'gbak -backup -t -v -user '+firebirdUsuario+' -password '+firebirdSenha+' "'+getConf('BKP_ORIGEM')+'" "'+getConf('BKP_DESTINO2')+getConf('CLIENTE')+'_ '+ formataDataSQL(DateToStr(Date))+'.BKP"'), SW_SHOW);
-
-          //Zipa e envia para a internet.
-          //if (DayOfTheMonth(Date) = 1) OR (DayOfTheMonth(Date) = 6) OR (DayOfTheMonth(Date) = 13) OR (DayOfTheMonth(Date) = 20) OR (DayOfTheMonth(Date) = 27) then
-          if ((DayOfTheMonth(Date) mod 2) = 0) then
-          Begin
-               WinExec(PChar(ExtractFilePath(ParamStr(0))+'Rar.exe a "'+arquivoRAR+'" "'+arquivoBkp+'"'), SW_SHOW);
-
-               espera(100,'Compactando backup e enviando para a Nuvem...');
-               PRINCIPAL.setMensagem('Conectando-se ao FTP...');
-               conectaFTP(ftpImoveisServidor,ftpImoveisUsuario,ftpImoveisSenha);
-               //PRINCIPAL.ObjFTP.ChangeDir(getConf('BKP_CAMINHO_FTP'));
-               PRINCIPAL.ObjFTP.ChangeDir('/backup_banco_imobiliarias/');
-               PRINCIPAL.setMensagem('Enviando backup para o FTP...');
-               PRINCIPAL.ObjFTP.Put(arquivoRAR);
-          end;
-
-          varSQL := getSQL('UPDATE sistema set valor = '''+FormatDateTime('dd/mm/yyyy',Date)+''' where tipo = ''BKP_DATA''');
-          varSQL.ApplyUpdates;
-
-     end;
-
-finally
-       PRINCIPAL.setMensagem('AÇÃO FINALIZADA.');
-       PRINCIPAL.ObjFTP.Disconnect;
-
-       FreeAndNil(varSQL);
-end;
-
-End;
 
 Function wordcount(str : string) : integer;
 // Retorna o número de palavras que contem em uma string
@@ -1154,12 +1116,6 @@ Begin
      end;
 End;
 
-function decodificar(texto: String): String;
-begin
-     //O 'CDSV2Vs' é para ser retirado, visto que é meramente ilustrativo
-     result := Base64Decode(StringReplace(texto,'CDSV2Vs','',[rfReplaceAll]));
-end;
-
 function colocarMascara(edt: String;str:String):string;
 var
   i : integer;
@@ -1374,7 +1330,6 @@ except
       PRINCIPAL.setMensagem('Erro ao buscar o código do registro escolhido! ('+CAMPO+')');
       Result := 0;
 end;
-
 End;
 
 function IDCampoSTR(CAMPO: string): String;
@@ -1645,58 +1600,6 @@ for n := 1 to length(Texto) do
 Result := retorno;
 end;
 
-function getSelect(sql: String): TZQuery;
-Begin
-
-     if NOT PRINCIPAL.Conexao.Connected then
-     Begin
-          principal.setmensagem('Você não está conectado(a) ao servidor. Favor verificar a sua rede (máquina, cabo e equipamentos) O sistema vai TENTAR RECONECTAR AUTOMATICAMENTE agora.');
-
-          try
-             PRINCIPAL.Conexao.Connected := True;
-          except
-                Begin
-                     unUtilitario.setmensagem('Verifique os problemas da rede para conseguir usar o sistema. (O sistema será fechado.)','erro');
-                     PRINCIPAL.Close;
-                end;
-          end;
-     end;
-     
-
-      try
-         result := TZQuery.Create(PRINCIPAL);
-         result.Connection := PRINCIPAL.Conexao;
-         result.SQL.Add(' '+sql);
-         result.Open;
-         //result.RecordCount;
-
-         if POS('UPDATE', UpperCase(result.SQL.Text)) > 0 then
-            setLogSQL('SQL UPDATE', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
-
-         if POS('INSERT', UpperCase(result.SQL.Text)) > 0 then
-            setLogSQL('SQL INSERT', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
-
-         if POS('DELETE', UpperCase(result.SQL.Text)) > 0 then
-            setLogSQL('SQL DELETE', 'SQL', 'RASTREAMENTO DE COMANDOS', result.SQL.Text);
-
-      except
-            On E : Exception Do
-            Begin
-                 if (StrPos(pchar(E.Message), 'Failed to establish a connection.') <> nil) then
-                 Begin
-                      ShowMessage('Problemas na rede! O sistema não conseguiu se conectar ao Servidor! Verifique o campo SERVIDOR no Login.'+#13+#13+SQL+#13+'ERRO: '+#13+e.Message);
-                      PRINCIPAL.Close;
-                 end
-                 else
-                 Begin
-                      ShowMessage('Problemas na rede! Erro ao passar um comando SQL ao Servidor!'+#13+#13+SQL+#13+'ERRO: '+#13+e.Message);
-                 end;
-                 FreeAndNil(result);
-                 exit;
-            End;
-      end;
-end;
-
 function Dias_Uteis(DataI, DataF:TDateTime):Integer;
 var
  contador:Integer;
@@ -1730,23 +1633,6 @@ end;
 
 function getSQL(sql: String): TZQuery;
 Begin
-     {try
-     //if NOT PRINCIPAL.Ping() then
-     //Begin
-     //   PRINCIPAL.Conexao.Reconnect;
-     //   PRINCIPAL.Conexao_log.Reconnect;
-     //end;
-
-     except
-           On E : Exception Do
-           Begin
-           ShowMessage('ÚLTIMA TENTATIVA. O sistema NÃO está conseguindo se conectar ao servidor para executar o comando:'+#13+sql+#13+e.Message);
-           result := TZQuery.Create(PRINCIPAL);
-           exit;
-           end;
-     end;   }
-     
-
 
       //ALTERAR PARA DEXECUTAR A SQL SEM RETORNAR UMA QUERY, POIS NÃO É O CASO DESSA FUNÇÃO!
       try
@@ -1810,130 +1696,47 @@ begin
   result := mensagem.ShowModal;
 end;
 
-
-function Base64Decode(const S: string): string;
-var
-  OutBuf: array[0..2] of Byte;
-  InBuf : array[0..3] of Byte;
-  iI, iJ: Integer;
-begin
-  if Length(S) mod 4 <> 0 then
-    raise Exception.Create('Base64: Incorrect string format');
-  SetLength(Result, ((Length(S) div 4) - 1) * 3);
-  for iI := 1 to (Length(S) div 4) - 1 do begin
-    Move(S[(iI - 1) * 4 + 1], InBuf, 4);
-    for iJ := 0 to 3 do
-      case InBuf[iJ] of
-        43: InBuf[iJ] := 62;
-        48..57: Inc(InBuf[iJ], 4);
-        65..90: Dec(InBuf[iJ], 65);
-        97..122: Dec(InBuf[iJ], 71);
-      else
-        InBuf[iJ] := 63;
-      end;
-    OutBuf[0] := (InBuf[0] shl 2) or ((InBuf[1] shr 4) and $3);
-    OutBuf[1] := (InBuf[1] shl 4) or ((InBuf[2] shr 2) and $F);
-    OutBuf[2] := (InBuf[2] shl 6) or (InBuf[3] and $3F);
-    Move(OutBuf, Result[(iI - 1) * 3 + 1], 3);
-  end;
-  if Length(S) <> 0 then begin
-    Move(S[Length(S) - 3], InBuf, 4);
-    if InBuf[2] = 61 then begin
-      for iJ := 0 to 1 do
-        case InBuf[iJ] of
-          43: InBuf[iJ] := 62;
-          48..57: Inc(InBuf[iJ], 4);
-          65..90: Dec(InBuf[iJ], 65);
-          97..122: Dec(InBuf[iJ], 71);
-        else
-          InBuf[iJ] := 63;
-        end;
-      OutBuf[0] := (InBuf[0] shl 2) or ((InBuf[1] shr 4) and $3);
-      Result := Result + Char(OutBuf[0]);
-    end else if InBuf[3] = 61 then begin
-      for iJ := 0 to 2 do
-        case InBuf[iJ] of
-          43: InBuf[iJ] := 62;
-          48..57: Inc(InBuf[iJ], 4);
-          65..90: Dec(InBuf[iJ], 65);
-          97..122: Dec(InBuf[iJ], 71);
-        else
-          InBuf[iJ] := 63;
-        end;
-      OutBuf[0] := (InBuf[0] shl 2) or ((InBuf[1] shr 4) and $3);
-      OutBuf[1] := (InBuf[1] shl 4) or ((InBuf[2] shr 2) and $F);
-      Result := Result + Char(OutBuf[0]) + Char(OutBuf[1]);
-    end else begin
-      for iJ := 0 to 3 do
-        case InBuf[iJ] of
-          43: InBuf[iJ] := 62;
-          48..57: Inc(InBuf[iJ], 4);
-          65..90: Dec(InBuf[iJ], 65);
-          97..122: Dec(InBuf[iJ], 71);
-        else
-          InBuf[iJ] := 63;
-        end;
-      OutBuf[0] := (InBuf[0] shl 2) or ((InBuf[1] shr 4) and $3);
-      OutBuf[1] := (InBuf[1] shl 4) or ((InBuf[2] shr 2) and $F);
-      OutBuf[2] := (InBuf[2] shl 6) or (InBuf[3] and $3F);
-      Result := Result + Char(OutBuf[0]) + Char(OutBuf[1]) + Char(OutBuf[2]);
-    end;
-  end;
-end;
-
 function GetVersaoSistema(): string;
-var
-  VerInfoSize: DWORD;
-  VerInfo: Pointer;
-  VerValueSize: DWORD;
-  VerValue: PVSFixedFileInfo;
-  Dummy: DWORD;
-
+var VerInfoSize: DWORD;
+VerInfo: Pointer;
+VerValueSize: DWORD;
+VerValue: PVSFixedFileInfo;
+Dummy: DWORD;
 begin
-  VerInfoSize := GetFileVersionInfoSize(PChar(
-    ParamStr(0)), Dummy);
+  VerInfoSize := GetFileVersionInfoSize(PChar(ParamStr(0)), Dummy);
   GetMem(VerInfo, VerInfoSize);
   GetFileVersionInfo(PChar(ParamStr(0)), 0,
     VerInfoSize, VerInfo);
-  VerQueryValue(VerInfo, '\', Pointer(VerValue),
+    VerQueryValue(VerInfo, '\', Pointer(VerValue),
     VerValueSize);
-  with VerValue^ do
-  begin
-    Result := IntToStr(dwFileVersionMS shr 16);
-    Result := Result + '.' + IntToStr(
-      dwFileVersionMS and $FFFF);
-    Result := Result + '.' + IntToStr(
-      dwFileVersionLS shr 16);
-    Result := Result + '.' + IntToStr(
-      dwFileVersionLS and $FFFF);
-  end;
-  FreeMem(VerInfo, VerInfoSize);
+with VerValue^ do
+begin
+Result := IntToStr(dwFileVersionMS shr 16);
+Result := Result + '.' + IntToStr(dwFileVersionMS and $FFFF);
+Result := Result + '.' + IntToStr(dwFileVersionLS shr 16);
+Result := Result + '.' + IntToStr(dwFileVersionLS and $FFFF);
 end;
+FreeMem(VerInfo, VerInfoSize);
+end;
+
 //---Pede confirmação de senha do usuário(a) logado...
 function verificaMesmaPessoa(): Boolean;
 var Senha : String;
     SqlSenha : TZQuery;
 begin
    result := false;
-
    Senha := Trim(UpperCase(PasswordInputBox('Verificação de usuário(a)','Entre com a sua senha de usuário(a):')));
-
-  if Length(Trim(Senha)) <= 0 then begin
+   if Length(Trim(Senha)) <= 0 then begin
       unUtilitario.setMensagem('Senha não informada','informa');
-     exit;
+      exit;
    end;
-
-  SqlSenha := unUtilitario.getSelect('select senha from usuario where id_usuario = '''+getUser('CODIGO_USUARIO')+''' and  ativo = ''SIM''');
-
-  if Senha = SqlSenha.FieldByName('SENHA').AsString then begin
-     result := true;
-  end
+   SqlSenha := unUtilitario.getSelect('select senha from usuario where id_usuario = '''+getUser('CODIGO_USUARIO')+''' and  ativo = ''SIM''');
+   if Senha = SqlSenha.FieldByName('SENHA').AsString then begin
+      result := true;
+   end
    else
-     unUtilitario.setMensagem('Senha incorreta','erro') ;
-
+       unUtilitario.setMensagem('Senha incorreta','erro');
    FreeAndNil(SqlSenha);
 end;
-
-
 
 end.

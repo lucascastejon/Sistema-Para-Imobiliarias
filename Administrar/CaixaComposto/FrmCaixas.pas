@@ -3668,13 +3668,6 @@ begin
   IF (COLUMN.FieldName = 'DATA_PGTO') THEN
   Begin
 
-       if  (POS('[DEPOSITO]',Grid_Busca.DataSource.DataSet.FieldByName('OPERACAO').AsString) > 0) THEN
-       begin
-           Grid_Busca.Canvas.Brush.Color := clGradientActiveCaption;
-       end
-       ELSE
-           Grid_Busca.Canvas.Brush.Color:= clWhite;
-
        if  Grid_Busca.DataSource.DataSet.FieldByName('GARANTIDO').AsString = 'SIM' THEN
        begin
            Grid_Busca.Canvas.Font.Color := clFuchsia;
@@ -3828,6 +3821,25 @@ begin
            Grid_BuscaSaida.Canvas.FillRect(Rect);
            Grid_BuscaSaida.DefaultDrawColumnCell(Rect, DataCol, Column, State);
       end;
+  End;
+
+  IF (COLUMN.FieldName = 'PESSOA') THEN
+  Begin
+       if (POS('[DEPOSITO]',Grid_BuscaSaida.DataSource.DataSet.FieldByName('OPERACAO').AsString) > 0) THEN
+      begin
+           Grid_BuscaSaida.Canvas.Brush.Color:= clOlive;
+           Grid_BuscaSaida.Canvas.Font.Color:= clWhite;
+           Grid_BuscaSaida.Canvas.Font.Style := Grid_Busca.Canvas.Font.Style + [fsBold];
+      end
+    ELSE
+      begin
+           Grid_BuscaSaida.Canvas.Brush.Color:= clWhite;
+           Grid_BuscaSaida.Canvas.Font.Color:= clBlack;
+           Grid_BuscaSaida.Canvas.Font.Style := Grid_Busca.Canvas.Font.Style;
+      end;
+
+      Grid_BuscaSaida.Canvas.FillRect(Rect);
+      Grid_BuscaSaida.DefaultDrawColumnCell(Rect, DataCol, Column, State);
   End;
 
 

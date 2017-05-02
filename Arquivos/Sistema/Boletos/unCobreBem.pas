@@ -8,7 +8,8 @@ unit unCobreBem;
 {$ENDIF}
 interface
 
-uses ComObj, Classes, unConfiguracao, unUtilitario, ZDataset,{$IFDEF USAVARIANTS} Variants,{$ENDIF} SysUtils, unLog, ShellApi, Windows;
+uses ComObj, Classes, unConfiguracao, unUtilitario, unValidacao,
+ZDataset,{$IFDEF USAVARIANTS} Variants,{$ENDIF} SysUtils, unLog, ShellApi, Windows;
 
 var
    CobreBemX: Variant;
@@ -479,7 +480,7 @@ Begin
      if Trim(texto) = '' then
         Result := ''
      else
-         Result := unUtilitario.StringBetween(texto, '<nossonumero>', '</nossonumero>');
+         Result := unValidacao.StringBetween(texto, '<nossonumero>', '</nossonumero>'); //UnUtilitario  Antigo
 end;
 
 end.

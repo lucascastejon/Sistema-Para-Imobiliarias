@@ -339,6 +339,21 @@ object CAD_Aluguel: TCAD_Aluguel
       Height = 13
       Anchors = [akLeft, akBottom]
       Caption = 'Dep'#243'sito'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsUnderline]
+      ParentFont = False
+      Transparent = True
+    end
+    object Label139: TLabel
+      Left = 583
+      Top = 2
+      Width = 30
+      Height = 13
+      Anchors = [akLeft, akBottom]
+      Caption = 'Boleto'
       Transparent = True
     end
     object Btn_Esquerda: TBitBtn
@@ -858,6 +873,18 @@ object CAD_Aluguel: TCAD_Aluguel
       TabOrder = 15
       OnMouseMove = ListView3MouseMove
     end
+    object ListView8: TListView
+      Left = 554
+      Top = 1
+      Width = 23
+      Height = 14
+      Anchors = [akLeft, akBottom]
+      BorderStyle = bsNone
+      Color = clGradientActiveCaption
+      Columns = <>
+      TabOrder = 16
+      OnMouseMove = ListView3MouseMove
+    end
   end
   object Page_Central: TPageControl
     Left = 0
@@ -872,10 +899,6 @@ object CAD_Aluguel: TCAD_Aluguel
       Caption = '&Pesquisa'
       ImageIndex = 77
       OnShow = Tab_PesquisaShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel2: TPanel
         Left = 0
         Top = 0
@@ -1191,7 +1214,7 @@ object CAD_Aluguel: TCAD_Aluguel
           Height = 21
           CharCase = ecUpperCase
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 13
           Sorted = True
           TabOrder = 5
         end
@@ -1354,6 +1377,7 @@ object CAD_Aluguel: TCAD_Aluguel
             Expanded = False
             FieldName = 'TIPO_CONTRATO'
             Title.Caption = 'Tipo'
+            Width = 64
             Visible = True
           end
           item
@@ -1367,6 +1391,7 @@ object CAD_Aluguel: TCAD_Aluguel
             Expanded = False
             FieldName = 'VENCIMENTO'
             Title.Caption = '1 Vencimento'
+            Width = 64
             Visible = True
           end
           item
@@ -1406,6 +1431,7 @@ object CAD_Aluguel: TCAD_Aluguel
             Expanded = False
             FieldName = 'DATAFINAL'
             Title.Caption = 'Data Final'
+            Width = 64
             Visible = True
           end>
       end
@@ -1554,10 +1580,6 @@ object CAD_Aluguel: TCAD_Aluguel
     object Tab_Cadastro: TTabSheet
       Caption = '&Cadastro'
       ImageIndex = 40
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PageControl2: TPageControl
         Left = 0
         Top = 0
@@ -1569,16 +1591,11 @@ object CAD_Aluguel: TCAD_Aluguel
         Images = PRINCIPAL.ImagensRosa
         Style = tsButtons
         TabOrder = 0
-        ExplicitHeight = 432
         object Tab_Informacoes: TTabSheet
           Caption = '&Informa'#231#245'es'
           ImageIndex = 5
           OnHide = Tab_InformacoesHide
           OnShow = Tab_InformacoesShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox2: TGroupBox
             Left = 0
             Top = 0
@@ -2341,7 +2358,6 @@ object CAD_Aluguel: TCAD_Aluguel
             Ctl3D = True
             ParentCtl3D = False
             TabOrder = 2
-            ExplicitHeight = 144
             object IMG_Pessoas: TImage
               Left = 271
               Top = 52
@@ -2842,10 +2858,6 @@ object CAD_Aluguel: TCAD_Aluguel
           ImageIndex = 4
           OnHide = Tab_CondicoesHide
           OnShow = Tab_CondicoesShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label45: TLabel
             Left = 397
             Top = 107
@@ -3268,9 +3280,9 @@ object CAD_Aluguel: TCAD_Aluguel
               Top = 14
               Width = 61
               Height = 15
-              Hint = 'Deseja gerar as contas como boletos via remessa?'
+              Hint = 'Depositar ao Propriet'#225'rio?'
               Caption = 'Dep'#243'sito?'
-              DataField = 'HONORARIO_ADMIN'
+              DataField = 'HONORARIO_1ALUGUEL'
               DataSource = DS
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
@@ -3672,7 +3684,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Font.Height = -11
               Font.Name = 'Tahoma'
               Font.Style = []
-              ItemHeight = 0
+              ItemHeight = 13
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -3694,10 +3706,6 @@ object CAD_Aluguel: TCAD_Aluguel
           Caption = 'Gera'#231#227'o do Financeiro'
           ImageIndex = 17
           OnShow = TabSheet1Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox24: TGroupBox
             Left = 0
             Top = 145
@@ -4080,7 +4088,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Font.Height = -11
               Font.Name = 'Tahoma'
               Font.Style = [fsBold]
-              ItemHeight = 0
+              ItemHeight = 13
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -4106,7 +4114,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Font.Height = -11
               Font.Name = 'Tahoma'
               Font.Style = [fsBold]
-              ItemHeight = 0
+              ItemHeight = 13
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -4963,10 +4971,6 @@ object CAD_Aluguel: TCAD_Aluguel
           Caption = 'Resumo'
           ImageIndex = 12
           OnShow = tabFinanceiroShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox11: TGroupBox
             Left = 0
             Top = 0
@@ -5690,10 +5694,6 @@ object CAD_Aluguel: TCAD_Aluguel
           Caption = 'Reajustes'
           ImageIndex = 4
           OnShow = tabReajustesShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox21: TGroupBox
             Left = 710
             Top = 0
@@ -5845,7 +5845,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Height = 154
               Cursor = crHandPoint
               CalColors.TitleBackColor = clGray
-              Date = 39647.268621342590000000
+              Date = 39647.704938726850000000
               TabOrder = 3
             end
             object EditValorDiaForma: TComboBox
@@ -5958,7 +5958,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Height = 154
               Cursor = crHandPoint
               CalColors.TitleBackColor = clGray
-              Date = 39647.268621458330000000
+              Date = 39647.704938842590000000
               TabOrder = 2
             end
             object EditValorValorForma: TComboBox
@@ -7257,14 +7257,10 @@ object CAD_Aluguel: TCAD_Aluguel
           Caption = 'Contas'
           ImageIndex = 16
           OnShow = TabSheet2Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label123: TLabel
             Left = 0
             Top = 0
-            Width = 89
+            Width = 912
             Height = 16
             Align = alTop
             Alignment = taCenter
@@ -7275,11 +7271,12 @@ object CAD_Aluguel: TCAD_Aluguel
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
+            ExplicitWidth = 89
           end
           object Label124: TLabel
             Left = 0
             Top = 171
-            Width = 73
+            Width = 912
             Height = 16
             Align = alTop
             Alignment = taCenter
@@ -7290,6 +7287,7 @@ object CAD_Aluguel: TCAD_Aluguel
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
+            ExplicitWidth = 73
           end
           object DBGrid5: TDBGrid
             Left = 0
@@ -7717,10 +7715,6 @@ object CAD_Aluguel: TCAD_Aluguel
           ImageIndex = 29
           OnHide = Tab_GarantiaHide
           OnShow = Tab_GarantiaShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox10: TGroupBox
             Left = 0
             Top = 0
@@ -7873,7 +7867,7 @@ object CAD_Aluguel: TCAD_Aluguel
                 Width = 167
                 Height = 21
                 CharCase = ecUpperCase
-                ItemHeight = 0
+                ItemHeight = 13
                 TabOrder = 6
               end
             end
@@ -8158,7 +8152,7 @@ object CAD_Aluguel: TCAD_Aluguel
                 Width = 142
                 Height = 21
                 CharCase = ecUpperCase
-                ItemHeight = 0
+                ItemHeight = 13
                 TabOrder = 6
               end
               object ComboGarantiaTipo: TComboBox
@@ -8451,10 +8445,6 @@ object CAD_Aluguel: TCAD_Aluguel
           ImageIndex = 102
           TabVisible = False
           OnShow = TabSheet3Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object PageControl1: TPageControl
             Left = 0
             Top = 0
@@ -8466,10 +8456,6 @@ object CAD_Aluguel: TCAD_Aluguel
             TabOrder = 0
             object TabSheet4: TTabSheet
               Caption = 'Renova'#231#245'es'
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 0
-              ExplicitHeight = 0
               object DBGrid6: TDBGrid
                 Left = 0
                 Top = 195
@@ -8491,10 +8477,6 @@ object CAD_Aluguel: TCAD_Aluguel
           ImageIndex = 8
           OnHide = TabSheet5Hide
           OnShow = TabSheet5Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label135: TLabel
             Left = 239
             Top = 231

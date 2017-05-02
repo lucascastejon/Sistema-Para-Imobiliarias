@@ -808,7 +808,7 @@ object ContaDemanda: TContaDemanda
         Top = 49
         Width = 420
         Height = 187
-        ActivePage = TabCategoria
+        ActivePage = TabOperacao
         Align = alClient
         TabOrder = 1
         object TabCategoria: TTabSheet
@@ -1459,7 +1459,7 @@ object ContaDemanda: TContaDemanda
             Top = 2
             Width = 155
             Height = 153
-            Date = 39106.714975150460000000
+            Date = 39106.743257141210000000
             TabOrder = 0
           end
           object BitBtn11: TBitBtn
@@ -2229,39 +2229,13 @@ object ContaDemanda: TContaDemanda
         object TabOperacao: TTabSheet
           Caption = 'Alterar Opera'#231#227'o'
           ImageIndex = 19
-          object Edit1: TEdit
-            Left = 8
-            Top = 16
-            Width = 401
-            Height = 21
-            CharCase = ecUpperCase
-            TabOrder = 0
-          end
-          object RadioButton1: TRadioButton
-            Left = 8
-            Top = 56
-            Width = 113
-            Height = 17
-            Caption = 'Concatenar'
-            Checked = True
-            TabOrder = 1
-            TabStop = True
-          end
-          object RadioButton2: TRadioButton
-            Left = 8
-            Top = 79
-            Width = 113
-            Height = 17
-            Caption = 'Substituir'
-            TabOrder = 2
-          end
           object BitBtn21: TBitBtn
             Left = 160
             Top = 110
             Width = 75
             Height = 25
             Caption = 'Alterar'
-            TabOrder = 3
+            TabOrder = 0
             OnClick = BitBtn21Click
             Glyph.Data = {
               36030000424D3603000000000000360000002800000010000000100000000100
@@ -2291,37 +2265,37 @@ object ContaDemanda: TContaDemanda
               DDFBE1CED8AD9548301FB89E8CBBA08FBCA190BBA08FBA9F8EB79E8CB69C8AB2
               9988B09786AD9583AB9281A9907FA68E7DA58C7BA48B7AA48B7A}
           end
-          object RadioButton3: TRadioButton
-            Left = 127
-            Top = 56
-            Width = 113
+          object RadioColocaBoleto: TRadioButton
+            Left = 28
+            Top = 40
+            Width = 131
             Height = 17
-            Caption = 'Adicionar BOLETOS'
-            TabOrder = 4
+            Caption = 'Colocar como BOLETO'
+            TabOrder = 1
           end
-          object RadioButton4: TRadioButton
-            Left = 127
-            Top = 79
-            Width = 113
+          object RadioRetiraBoleto: TRadioButton
+            Left = 28
+            Top = 63
+            Width = 114
             Height = 17
-            Caption = 'Retirar BOLETOS'
-            TabOrder = 5
+            Caption = 'Retirar BOLETO'
+            TabOrder = 2
           end
-          object RadioButton5: TRadioButton
-            Left = 263
-            Top = 56
-            Width = 130
+          object RadioColocaDeposito: TRadioButton
+            Left = 215
+            Top = 40
+            Width = 154
             Height = 17
-            Caption = 'Adicionar DEPOSITO'
-            TabOrder = 6
+            Caption = 'Adicionar como DEP'#211'SITO'
+            TabOrder = 3
           end
-          object RadioButton6: TRadioButton
-            Left = 263
-            Top = 79
+          object RadioRetiraDeposito: TRadioButton
+            Left = 215
+            Top = 63
             Width = 130
             Height = 17
             Caption = 'RETIRAR DEPOSITO'
-            TabOrder = 7
+            TabOrder = 4
           end
         end
       end

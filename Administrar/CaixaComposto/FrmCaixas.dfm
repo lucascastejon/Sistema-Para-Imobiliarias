@@ -627,17 +627,13 @@ inherited CAD_Caixas: TCAD_Caixas
   inherited PageControl1: TPageControl
     Width = 930
     Height = 470
-    ActivePage = TabCaixaDia
+    ActivePage = Tab_Pesquisa_Saida
     ExplicitWidth = 930
     ExplicitHeight = 470
     object TabCaixaDia: TTabSheet [0]
       Caption = 'Caixa do Dia'
       ImageIndex = 17
       OnShow = TabCaixaDiaShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel13: TPanel
         Left = 0
         Top = 0
@@ -1432,7 +1428,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Top = 5
           Width = 174
           Height = 20
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 5
           OnChange = diaComboChange
         end
@@ -2214,7 +2210,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 5
         end
         object ComboGrupo: TComboBox
@@ -2224,7 +2220,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 4
         end
         object ComboSubgrupo: TComboBox
@@ -2234,7 +2230,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 6
         end
         object checkBoletoCE: TCheckBox
@@ -2256,7 +2252,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 8
         end
       end
@@ -2535,7 +2531,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Left = 0
           Top = 0
           Width = 85
-          Height = 23
+          Height = 29
           Cursor = crHelp
           Hint = 'VALOR REAL.'
           Align = alLeft
@@ -2548,12 +2544,13 @@ inherited CAD_Caixas: TCAD_Caixas
           Font.Style = [fsBold]
           ParentBiDiMode = False
           ParentFont = False
+          ExplicitHeight = 23
         end
         object Label_TotalCalculo: TLabel
           Left = 837
           Top = 0
           Width = 85
-          Height = 23
+          Height = 29
           Cursor = crHelp
           Hint = 'VALOR SOB C'#193'LCULO.'
           Align = alRight
@@ -2566,12 +2563,13 @@ inherited CAD_Caixas: TCAD_Caixas
           Font.Style = [fsBold]
           ParentBiDiMode = False
           ParentFont = False
+          ExplicitHeight = 23
         end
         object msgClienteEntrada: TLabel
           Left = 85
           Top = 0
-          Width = 5
-          Height = 8
+          Width = 752
+          Height = 29
           Cursor = crHandPoint
           Hint = 'Existe mensagem para este cliente.'
           Align = alClient
@@ -2586,16 +2584,14 @@ inherited CAD_Caixas: TCAD_Caixas
           Layout = tlCenter
           WordWrap = True
           OnDblClick = msgClienteEntradaDblClick
+          ExplicitWidth = 5
+          ExplicitHeight = 8
         end
       end
     end
     object Tab_Pesquisa_Saida: TTabSheet [2]
       Caption = 'Pesquisa &Sa'#237'da'
       ImageIndex = 77
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel7: TPanel
         Left = 0
         Top = 412
@@ -2609,7 +2605,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Left = 0
           Top = 0
           Width = 85
-          Height = 23
+          Height = 29
           Cursor = crHelp
           Hint = 'VALOR REAL.'
           Align = alLeft
@@ -2622,12 +2618,13 @@ inherited CAD_Caixas: TCAD_Caixas
           Font.Style = [fsBold]
           ParentBiDiMode = False
           ParentFont = False
+          ExplicitHeight = 23
         end
         object Label_TotalCalculoSaida: TLabel
           Left = 837
           Top = 0
           Width = 85
-          Height = 23
+          Height = 29
           Cursor = crHelp
           Hint = 'VALOR SOB C'#193'LCULO.'
           Align = alRight
@@ -2640,12 +2637,13 @@ inherited CAD_Caixas: TCAD_Caixas
           Font.Style = [fsBold]
           ParentBiDiMode = False
           ParentFont = False
+          ExplicitHeight = 23
         end
         object msgClienteSaida: TLabel
           Left = 85
           Top = 0
-          Width = 5
-          Height = 8
+          Width = 752
+          Height = 29
           Cursor = crHandPoint
           Hint = 'Existe mensagem para este cliente.'
           Align = alClient
@@ -2660,6 +2658,8 @@ inherited CAD_Caixas: TCAD_Caixas
           Layout = tlCenter
           WordWrap = True
           OnDblClick = msgClienteSaidaDblClick
+          ExplicitWidth = 5
+          ExplicitHeight = 8
         end
       end
       object Panel8: TPanel
@@ -2879,7 +2879,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 2
         end
         object ComboGrupoSaida: TComboBox
@@ -2889,7 +2889,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 3
         end
         object ComboSubgrupoSaida: TComboBox
@@ -2899,7 +2899,7 @@ inherited CAD_Caixas: TCAD_Caixas
           Height = 20
           Cursor = crHandPoint
           Color = 14215660
-          ItemHeight = 0
+          ItemHeight = 12
           TabOrder = 4
         end
         object Data_MaiorSaida: TDateTimePicker
@@ -3765,10 +3765,6 @@ inherited CAD_Caixas: TCAD_Caixas
                   Caption = 'Hist'#243'rico'
                   ImageIndex = 36
                   OnShow = TabInfoHistoricoShow
-                  ExplicitLeft = 0
-                  ExplicitTop = 0
-                  ExplicitWidth = 0
-                  ExplicitHeight = 0
                   object DBGrid1: TDBGrid
                     Left = 0
                     Top = 0
@@ -3884,10 +3880,6 @@ inherited CAD_Caixas: TCAD_Caixas
                   Caption = 'Pagamento'
                   ImageIndex = 8
                   OnShow = TabInfoPagamentoShow
-                  ExplicitLeft = 0
-                  ExplicitTop = 0
-                  ExplicitWidth = 0
-                  ExplicitHeight = 0
                   DesignSize = (
                     449
                     176)
@@ -4976,10 +4968,6 @@ inherited CAD_Caixas: TCAD_Caixas
           ImageIndex = 15
           OnHide = TabSheet1Hide
           OnShow = TabSheet1Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           DesignSize = (
             914
             409)
@@ -5483,10 +5471,6 @@ inherited CAD_Caixas: TCAD_Caixas
           Caption = 'Cheques'
           ImageIndex = 60
           OnShow = tabCadastroChequeShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Panel24: TPanel
             Left = 0
             Top = 0
@@ -6052,10 +6036,6 @@ inherited CAD_Caixas: TCAD_Caixas
           ImageIndex = 102
           OnExit = TabSheet8Exit
           OnShow = TabSheet8Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Panel6: TPanel
             Left = 0
             Top = 0
@@ -6509,10 +6489,6 @@ inherited CAD_Caixas: TCAD_Caixas
           Caption = 'Boletos'
           ImageIndex = 62
           OnShow = Tab_BoletoShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object SpeedInformaBoleto: TSpeedButton
             Left = 3
             Top = 111
