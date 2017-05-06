@@ -17395,6 +17395,6 @@ object PRINCIPAL: TPRINCIPAL
     Interval = 300000
     OnTimer = checaConexaoTimer
     Left = 48
-    Top = 56
+    Top = 88
   end
 end

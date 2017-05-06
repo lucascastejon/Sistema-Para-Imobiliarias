@@ -2969,11 +2969,17 @@ begin
               exit;
           end;
 
+          checaConexao.Enabled := FALSE;
+          ExportarWeb.Enabled := FALSE;
+          leitorMensagem.Enabled := FALSE;
+
           varSQL := unUtilitario.getSQL('INSERT INTO LOG VALUES (NULL, ''BKP'', ''ROTINA DO SISTEMA'',NULL, CURRENT_TIMESTAMP, '+getUser('CODIGO_USUARIO')+', 0, ''ROTINA DE BACKUP DO SISTEMA'', ''SIM'')');
+
+          varSQL := unUtilitario.getSQL('delete from tabela where NOMETEC = ''LOGIN'' and OBS = ''LOGIN >> BLOQUEADO'' ');
 
           PRINCIPAL.Conexao.Disconnect;
 
-          WinExec(PChar(ExtractFilePath(ParamStr(0))+'instsvc.exe stop'), SW_HIDE);
+          WinExec(PChar(ExtractFilePath(ParamStr(0))+'instsvc.exe stop'), SW_NORMAL);
 
           espera(10,'Parando o serviço Célula...');
 
@@ -2989,7 +2995,7 @@ begin
                exit;
           end;
 
-          WinExec(PChar(ExtractFilePath(ParamStr(0))+'instsvc.exe start'), SW_HIDE);
+          WinExec(PChar(ExtractFilePath(ParamStr(0))+'instsvc.exe start'), SW_NORMAL);
 
           espera(10,'Iniciando o serviço Célula...');
           
@@ -3017,6 +3023,7 @@ begin
           varSQL := unUtilitario.getSQL('delete from contrato where id_contrato in (select id_contrato from contrato where HONORARIO_APOS <> 1)');
           
           PRINCIPAL.setMensagem('Backup feito com sucesso!');
+          varSQL.Close;
           FreeAndNil(varSQL);
      end;
 end;
