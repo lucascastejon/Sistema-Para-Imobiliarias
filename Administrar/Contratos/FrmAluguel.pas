@@ -1527,7 +1527,7 @@ if (strtoint(qtde) = 3)Then
      AssignFile(Arquivo,nomeArquivo);
      Rewrite(Arquivo);
 
-     Writeln(Arquivo,'RELAT�RIO DE CONTRATOS SIMPLIFICADO. '+DateTimeToStr(Date()+Time()));
+     Writeln(Arquivo,'RELATORIO DE CONTRATOS SIMPLIFICADO. '+DateTimeToStr(Date()+Time()));
      Writeln(Arquivo,' ');
      Writeln(Arquivo,' ');
 
@@ -1674,7 +1674,7 @@ if (strtoint(qtde) = 3)Then
             if qtde = '2' then
             Begin
            Writeln(Arquivo,'--------------------------------------------------------------------');
-           Writeln(Arquivo,'CONTRATO: '+DM_REL.ZQUERY1.FieldByName('ID_CONTRATO').AsString+'   VENCIMENTO DO CONTRATO: '+DM_REL.ZQUERY1.FieldByName('VENCIMENTO').AsString+'   ** '+varGarantido);
+           Writeln(Arquivo,'CONTRATO: '+DM_REL.ZQUERY1.FieldByName('ID_CONTRATO').AsString+'   TERMINO: '+DateToStr(IncMonth(DM_REL.ZQUERY1.fieldbyname('VENCIMENTO').AsDateTime, DM_REL.ZQUERY1.fieldbyname('VIGENCIA').AsInteger - 1))+'  ** '+varGarantido);
            Writeln(Arquivo,'LOCADOR: '+getPessoa('locador',DM_REL.ZQUERY1.FieldByName('ID_IMOVEL').AsString));
            Writeln(Arquivo,'LOCATÁRIO: '+getPessoa('locatario',DM_REL.ZQUERY1.FieldByName('ID_CONTRATO').AsString));
            Writeln(Arquivo,'IMÓVEL: '+

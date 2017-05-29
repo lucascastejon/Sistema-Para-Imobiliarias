@@ -891,7 +891,7 @@ object CAD_Aluguel: TCAD_Aluguel
     Top = 30
     Width = 928
     Height = 460
-    ActivePage = Tab_Pesquisa
+    ActivePage = Tab_Cadastro
     Align = alClient
     Images = PRINCIPAL.ImagensRosa
     TabOrder = 1
@@ -1586,7 +1586,7 @@ object CAD_Aluguel: TCAD_Aluguel
         Width = 920
         Height = 431
         Cursor = crHandPoint
-        ActivePage = Tab_Informacoes
+        ActivePage = Tab_Condicoes
         Align = alClient
         Images = PRINCIPAL.ImagensRosa
         Style = tsButtons
@@ -5845,7 +5845,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Height = 154
               Cursor = crHandPoint
               CalColors.TitleBackColor = clGray
-              Date = 39647.704938726850000000
+              Date = 39647.597559872690000000
               TabOrder = 3
             end
             object EditValorDiaForma: TComboBox
@@ -5958,7 +5958,7 @@ object CAD_Aluguel: TCAD_Aluguel
               Height = 154
               Cursor = crHandPoint
               CalColors.TitleBackColor = clGray
-              Date = 39647.704938842590000000
+              Date = 39647.597559872690000000
               TabOrder = 2
             end
             object EditValorValorForma: TComboBox

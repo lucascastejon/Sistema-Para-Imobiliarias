@@ -432,6 +432,10 @@ type
     btnDisplay: TSpeedButton;
     DBEdit7: TDBEdit;
     Label122: TLabel;
+    btnFacebook: TBitBtn;
+    btnAbrirnoSite: TBitBtn;
+    procedure btnAbrirnoSiteClick(Sender: TObject);
+    procedure btnFacebookClick(Sender: TObject);
     procedure VernoClulaDisplay1Click(Sender: TObject);
     procedure btnDisplayClick(Sender: TObject);
     procedure DBGrid9DblClick(Sender: TObject);
@@ -2546,10 +2550,10 @@ begin
   inherited;
   if NOT DM_CADASTRO.Z_ImovelID_IMOVEL.isnull then
   Begin
-       Application.CreateForm(TFrmBrowser,FrmBrowser);
-       FrmBrowser.WindowState := wsMaximized;
-       
-       FrmBrowser.setSite('https://www.google.com.br/maps/place/'+unUtilitario.RemoveAcentos(StringReplace(DM_CADASTRO.Z_ImovelXTIPORUA.AsString+' '+DM_CADASTRO.Z_ImovelXNOMERUA.AsString+'-'+DM_CADASTRO.Z_ImovelXESTADO.AsString,' ','+',[rfReplaceAll,rfIgnoreCase]))+',+'+DM_CADASTRO.Z_ImovelXCEP.AsString+'/data=!4m2!3m1!1s0x94b0a88fd3ccb537:0x5fbcba06aa5070b0');
+       ShellExecute(0, 'open', PChar('https://www.google.com.br/maps/place/'+unUtilitario.RemoveAcentos(StringReplace(DM_CADASTRO.Z_ImovelXTIPORUA.AsString+' '+DM_CADASTRO.Z_ImovelXNOMERUA.AsString+', '+DM_CADASTRO.Z_ImovelNUMERO.AsString+', '+DM_CADASTRO.Z_ImovelXESTADO.AsString,' ','+',[rfReplaceAll,rfIgnoreCase]))+',+'+DM_CADASTRO.Z_ImovelXCEP.AsString+'/data=!4m2!3m1!1s0x94b0a88fd3ccb537:0x5fbcba06aa5070b0'), nil, nil, SW_SHOWNORMAL);
+       //Application.CreateForm(TFrmBrowser,FrmBrowser);
+       //FrmBrowser.WindowState := wsMaximized;
+       //FrmBrowser.setSite('https://www.google.com.br/maps/place/'+unUtilitario.RemoveAcentos(StringReplace(DM_CADASTRO.Z_ImovelXTIPORUA.AsString+' '+DM_CADASTRO.Z_ImovelXNOMERUA.AsString+'-'+DM_CADASTRO.Z_ImovelXESTADO.AsString,' ','+',[rfReplaceAll,rfIgnoreCase]))+',+'+DM_CADASTRO.Z_ImovelXCEP.AsString+'/data=!4m2!3m1!1s0x94b0a88fd3ccb537:0x5fbcba06aa5070b0');
   End
   Else
       showmessage('Nenhum imóvel foi selecionado.');
@@ -2635,6 +2639,17 @@ procedure TCAD_Imovel.btnEnviarNet3MouseMove(Sender: TObject;
 begin
   inherited;
   btnEnviarNet1MouseMove(Sender, Shift, X, Y);
+end;
+
+procedure TCAD_Imovel.btnFacebookClick(Sender: TObject);
+begin
+  inherited;
+  if NOT DM_CADASTRO.Z_ImovelID_IMOVEL.isnull then
+  Begin
+       ShellExecute(0, 'open', PChar('https://www.facebook.com/sharer/sharer.php?app_id=1496712770565168&kid_directed_site=0&sdk=joey&u=http%3A%2F%2F'+getConf('EMPRESA_HOMEPAGE')+'%2Fbem-vindo%2Fimovel.php%3Fcodigo%3D'+DM_CADASTRO.Z_ImovelID_IMOVEL.AsString+'&display=popup&ref=plugin&src=share_button'), nil, nil, SW_SHOWNORMAL);
+  End
+  Else
+      showmessage('Nenhum imóvel foi selecionado.');
 end;
 
 procedure TCAD_Imovel.limpaFotos();
@@ -2778,6 +2793,17 @@ begin
      parametros[0] := chaveEmprestimoEntradaPessoa.Text;
 
      setDocumento('RECIBO_NOVA_CHAVE', '', '',3, 0, 0,  0, parametros);
+end;
+
+procedure TCAD_Imovel.btnAbrirnoSiteClick(Sender: TObject);
+begin
+  inherited;
+  if NOT DM_CADASTRO.Z_ImovelID_IMOVEL.isnull then
+  Begin
+       ShellExecute(0, 'open', PChar('http://'+getConf('EMPRESA_HOMEPAGE')+'/bem-vindo/imovel.php?codigo='+DM_CADASTRO.Z_ImovelID_IMOVEL.AsString), nil, nil, SW_SHOWNORMAL);
+  End
+  Else
+      showmessage('Nenhum imóvel foi selecionado.');
 end;
 
 procedure TCAD_Imovel.btnChaveDevolverClick(Sender: TObject);

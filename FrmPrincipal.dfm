@@ -17075,7 +17075,6 @@ object PRINCIPAL: TPRINCIPAL
     Port = 3050
     Database = 'CDS-IMOBILIARIA2'
     User = 'G3G9I2V2'
-    Password = 'ADM3008'
     Properties.Strings = (
       'codepage=ISO8859_1')
     TransactIsolationLevel = tiReadCommitted
@@ -17234,7 +17233,6 @@ object PRINCIPAL: TPRINCIPAL
     Port = 3306
     Database = 'celul051_celuladigital'
     User = 'celul051_root'
-    Password = 'ADMIN9090'
     TransactIsolationLevel = tiReadCommitted
     SQLHourGlass = True
     Left = 272
@@ -17283,7 +17281,6 @@ object PRINCIPAL: TPRINCIPAL
     Port = 3050
     Database = 'CDS-LOG'
     User = 'G3G9I2V2'
-    Password = 'ADM3008'
     TransactIsolationLevel = tiReadCommitted
     Left = 336
     Top = 104
